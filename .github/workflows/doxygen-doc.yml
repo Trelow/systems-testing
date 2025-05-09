@@ -19,8 +19,10 @@ jobs:
       - name: Run Doxygen
         run: doxygen Doxyfile
 
-      - name: Upload Docs
-        uses: actions/upload-artifact@v2.3.1
+      - name: Upload Doxygen docs
+        uses: actions/upload-artifact@v4
         with:
           name: doxygen-docs
           path: docs/html
+          retention-days: 30
+
