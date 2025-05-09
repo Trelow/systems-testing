@@ -2,93 +2,136 @@ from node import Node
 
 
 class Tree:
-    """ Tree class for binary tree """
+    """Binary search tree helper class."""
 
     def __init__(self):
-        """ Constructor for Tree class """
+        """Initialize an empty tree (root este `None`)."""
         self.root = None
 
+    # ---------------------------------------------------------------------
+    # API public
+    # ---------------------------------------------------------------------
     def getRoot(self):
-        """ Method for get root of the tree """
+        """Returnează nodul rădăcină al arborelui.
+
+        Returns
+        -------
+        Node | None
+            Nodul rădăcină sau `None` dacă arborele este gol.
+        """
         return self.root
 
     def add(self, data):
-        """ Method for add data to the tree """
+        """Adaugă o valoare în arbore (inserare BST).
+
+        Parameters
+        ----------
+        data : int
+            Valoarea de inserat.
+        """
         if self.root is None:
             self.root = Node(data)
         else:
             self._add(data, self.root)
 
+    def find(self, data):
+        """Caută un nod cu valoarea *data*.
+
+        Parameters
+        ----------
+        data : int
+            Valoarea de căutat.
+
+        Returns
+        -------
+        Node | None
+            Nodul găsit sau `None` dacă nu există.
+        """
+        if self.root is not None:
+            return self._find(data, self.root)
+        return None
+
+    def deleteTree(self):
+        """Şterge tot arborele (setează `root = None`)."""
+        self.root = None
+
+    def printTree(self):
+        """Printează valorile în in‑ordine (sorted)."""
+        if self.root is not None:
+            self._printInorderTree(self.root)
+
+    # ---------------------------------------------------------------------
+    # API intern (underscore = helper recursive)
+    # ---------------------------------------------------------------------
     def _add(self, data, node):
-        """Method for add data to the tree
+        """Inserare recursivă (helper).
 
-        Args:
-            data (int): data to add
-
-        Returns:
-            None
+        Parameters
+        ----------
+        data : int
+            Valoarea de inserat.
+        node : Node
+            Subarborele în care se inserează.
         """
         if data < node.data:
-            if node.left is not None:
+            if node.left:
                 self._add(data, node.left)
             else:
                 node.left = Node(data)
         else:
-            if node.right is not None:
+            if node.right:
                 self._add(data, node.right)
             else:
                 node.right = Node(data)
 
-    def find(self, data):
-        """Method for find data in the tree
-
-        Args:
-            data (int): data to find
-
-        Returns:
-            Node: node with data
-        """
-        if self.root is not None:
-            return self._find(data, self.root)
-        else:
-            return None
-
     def _find(self, data, node):
+        """Căutare recursivă într‑un subarbore.
+
+        Parameters
+        ----------
+        data : int
+            Valoarea de găsit.
+        node : Node
+            Rădăcina subarborelui curent.
+
+        Returns
+        -------
+        Node | None
+            Nodul găsit sau `None`.
+        """
         if data == node.data:
             return node
-        elif (data < node.data and node.left is not None):
+        if data < node.data and node.left is not None:
             return self._find(data, node.left)
-        elif (data > node.data and node.right is not None):
+        if data > node.data and node.right is not None:
             return self._find(data, node.right)
+        return None
 
-    def deleteTree(self):
-        # TODO 1
-        self.root = None
-
-    def printTree(self):
-        # TODO 1
-        if self.root is not None:
-            self._printInorderTree(self.root)
+    # ----------------------- metode de afișare ---------------------------
 
     def _printInorderTree(self, node):
-        # TODO 1
+        """In‑ordine (stânga → nod → dreapta).
+
+        Parameters
+        ----------
+        node : Node
+            Nodul curent din recursie.
+        """
         if node is not None:
             self._printInorderTree(node.left)
-            print(str(node.data) + ' ')
+            print(f"{node.data} ")
             self._printInorderTree(node.right)
 
     def _printPreorderTree(self, node):
-        # TODO 2
+        """Pre‑ordine (nod → stânga → dreapta)."""
         if node is not None:
-            print(str(node.data) + ' ')
+            print(f"{node.data} ")
             self._printPreorderTree(node.left)
             self._printPreorderTree(node.right)
 
     def _printPostorderTree(self, node):
-        # TODO 2
+        """Post‑ordine (stânga → dreapta → nod)."""
         if node is not None:
             self._printPostorderTree(node.left)
             self._printPostorderTree(node.right)
-            print(str(node.data) + ' ')
-
-
+            print(f"{node.data} ")
